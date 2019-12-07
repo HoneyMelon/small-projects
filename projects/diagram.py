@@ -1,12 +1,16 @@
 # module for creating diagrams
 import math
 import random
-
 import stddraw
 import color
 
 
 def _get_min_max_for_one_dataset(array):
+    """
+    @param array: 2d Array
+    @return: min and max values for x and y
+    Calulates min and max for an array with one dataset of points
+    """
     minX = 0
     maxX = 0
     minY = 0
@@ -24,6 +28,11 @@ def _get_min_max_for_one_dataset(array):
 
 
 def _get_min_max_for_multiple_datasets(arrays):
+    """
+    @param arrays: 3d Array
+    @return: min and max values for x and y
+    Calculates min and max values for an array with multiple datasets of points
+    """
     minX = 0
     maxX = 0
     minY = 0
@@ -40,12 +49,26 @@ def _get_min_max_for_multiple_datasets(arrays):
 
 
 def _init_canvas(minX, maxX, minY, maxY):
+    """
+    @param minX: smallest x value
+    @param maxX: largest x value
+    @param minY: smallest y value
+    @param maxY: largest y value
+    Initialises a canvas with given scale
+    """
     stddraw.clear(color.DARK_GRAY)
     stddraw.setXscale(minX - 1, maxX + 1)  # -4 bis 3
     stddraw.setYscale(minY - 1, maxY + 1)  # -1 bis 8
 
 
 def _draw_coordinate_system(minX, maxX, minY, maxY):
+    """
+    @param minX: smallest x value
+    @param maxX: largest x value
+    @param minY: smallest y value
+    @param maxY: largest y value
+    Draws axis and numbers them
+    """
     stddraw.setPenColor(color.WHITE)
     stddraw.setPenRadius(0.01)
     stddraw.line(minX - 1, 0, maxX + 1, 0)
@@ -61,12 +84,24 @@ def _draw_coordinate_system(minX, maxX, minY, maxY):
 
 
 def _draw_points(array, pointcolor):
+    """
+    @param array: Array with points
+    @param pointcolor: Color of points
+    Draws given points in a color (TO BE USED FOR draw_data_random() FUNCTION)
+    """
     stddraw.setPenColor(pointcolor)
     for point in array:
         stddraw.point(point[0], point[1])
 
 
 def _draw_lines(array, linecolor):
+    """
+    @param array: Array with points
+    @param linecolor: Color of points
+    Draws points in given color,
+    sorts them by their x value from smallest to largest and connects
+    them with a line (TO BE USED FOR draw_data_random() FUNCTION)
+    """
     stddraw.setPenColor(linecolor)
     array = sorted(array, key=lambda point: point[0])
     for i in range(len(array) - 1):
@@ -74,13 +109,25 @@ def _draw_lines(array, linecolor):
 
 
 def _draw_bars(array, barcolor):
+    """
+    @param array: Array with points
+    @param barcolor: Color of bars
+    Draws a rectangle in a given color with a width of 0.6 from the x axis
+    to a given point (TO BE USED FOR draw_data_random() FUNCTION)
+    """
     stddraw.setPenColor(barcolor)
     for point in array:
-        yStart = 0 if point[1] > 0 else point[1]
+        yStart = 0 if point[1] > 0 else point[1]    # Bar starts at y=0 if y is positive and at y if y is negative
         stddraw.filledRectangle(point[0] - 0.3, yStart, 0.6, abs(point[1]))
 
 
 def draw_data_random(data):
+    """
+    @param data: Array with multiple datasets of points
+    Takes points from one dataset, randomly chooses one of the
+    three methods (points, line, bars) and draws data them in a random color
+    into coordinate system. Repeat for all datasets
+    """
     minX, maxX, minY, maxY = _get_min_max_for_multiple_datasets(data)
     _init_canvas(minX, maxX, minY, maxY)
 
@@ -101,6 +148,11 @@ def draw_data_random(data):
 
 
 def draw_points(array, pointcolor=color.WHITE):
+    """
+    @param array: Array with points
+    @param pointcolor: Color of points
+    Draws the points into a coordinate system
+    """
     minX, maxX, minY, maxY = _get_min_max_for_one_dataset(array)
     _init_canvas(minX, maxX, minY, maxY)
     _draw_points(array, pointcolor)
@@ -109,6 +161,11 @@ def draw_points(array, pointcolor=color.WHITE):
 
 
 def draw_lines(array, linecolor=color.WHITE):
+    """
+    @param array: Array with points
+    @param linecolor: Color of lines
+    Draws points connected by lines into a coordinate system
+    """
     minX, maxX, minY, maxY = _get_min_max_for_one_dataset(array)
     _init_canvas(minX, maxX, minY, maxY)
     _draw_lines(array, linecolor)
@@ -117,6 +174,11 @@ def draw_lines(array, linecolor=color.WHITE):
 
 
 def draw_bars(array, barcolor=color.WHITE):
+    """
+    @param array: Array with points
+    @param barcolor: Color of bars
+    Draws bars into coordinate systems
+    """
     minX, maxX, minY, maxY = _get_min_max_for_one_dataset(array)
     _init_canvas(minX, maxX, minY, maxY)
     _draw_bars(array, barcolor)
@@ -125,6 +187,11 @@ def draw_bars(array, barcolor=color.WHITE):
 
 
 def _get_circle_coordinates(procent):
+    """
+    @param procent: given percents
+    @return: x and y coordinates of points
+    Calculates the x and y coordinates of the points on the border of our circle
+    """
     radian = 2 * math.pi * procent / 100.0
     x = math.cos(radian)
     y = math.sin(radian)
@@ -132,6 +199,11 @@ def _get_circle_coordinates(procent):
 
 
 def pie_diagram(probabilities):
+    """
+    @param probabilities: Array with probabilities
+    Checks if the sum of the probabilities equals 100, initialises a background, draws one pie segment for each
+    probability in a different color. Displaces the probabilities of each slice outside of the chart.
+    """
     probability_sum = 0
     for probability in probabilities:
         probability_sum += probability
