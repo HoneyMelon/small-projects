@@ -5,6 +5,7 @@ import keyboard
 import math
 import time
 
+
 maxRadius = 0.3
 minRadius = 0.1
 width = 10
@@ -31,7 +32,7 @@ def bouncing_game(x, y, speedx, speedy):
     timediff = 0
     points = []
     position = [x, y]
-    foodPosition = [random.randint(2, 9), random.randint(2, 9)]
+    foodPosition = [random.randint(2, 2), random.randint(9, 9)]
     foodCounter = 0
     speed = [speedx, speedy]
     slowmo = False
