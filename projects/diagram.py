@@ -15,7 +15,6 @@ def _get_min_max_for_one_dataset(array):
     maxX = 0
     minY = 0
     maxY = 0
-    print(array)
     for point in array:
         newX = point[0]
         newY = point[1]
@@ -239,11 +238,37 @@ def pie_diagram(probabilities):
     stddraw.show()
 
 
-data = [
+def _test_get_min_max_for_one_dataset():
+    testdata = [1, 2], [2, 5], [-2, 7], [-3, 5], [5, -4]
+    expected = -3, 5, -4, 7
+    result = _get_min_max_for_one_dataset(testdata)
+    assert result == expected
+
+
+def _test_get_min_max_for_multiple_datasets():
+    testdata = [
     [[1, 2], [2, 5], [-2, 7], [-3, 5], [5, -4]],
     [[1, 6], [0, 4], [-2, 1], [3, 1], [5, -8]],
-    [[4, 2], [2, -2], [0, 2], [-2, 9], [-3, -4]],
-]
-pie_diagram([8, 7, 15, 10, 8, 10, 7, 9, 14, 4, 5, 3])
-#draw_data_random(data)
+    [[4, 2], [2, -2], [0, 2], [-2, 9], [-3, -4]]
+    ]
+    expected = -3, 5, -8, 9
+    result = _get_min_max_for_multiple_datasets(testdata)
+    assert result == expected
+
+
+def main():
+    try:
+        _test_get_min_max_for_one_dataset()
+        _test_get_min_max_for_multiple_datasets()
+        print('\nTest bestanden')
+    except AssertionError:
+        print('\nFehler beim Test')
+
+
+if __name__ == '__main__':
+    main()
+
+
+# pie_diagram([8, 7, 15, 10, 8, 10, 7, 9, 14, 4, 5, 3])
+# draw_data_random(data)
 # draw_lines(data[1], color.CYAN)
