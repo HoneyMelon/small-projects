@@ -21,7 +21,7 @@ PASCH_BASE_VALUES = {
 
 def print_throw(throw):
     """
-    @param throw: throw of dice
+    @param throw: list of ints
     prints a given throw of dice
     """
     throw.sort()
@@ -39,7 +39,7 @@ def print_throw(throw):
 
 def init_players():
     """
-    @return: List of player names
+    @return: list of strings
     initializes a given number of players
     """
     names = []
@@ -57,8 +57,8 @@ def init_players():
 
 def init_scoreboard(names):
     """
-    @param names: List of player names
-    @return: Dictionary with playername and pointscore
+    @param names: List of strings
+    @return: Dictionary of (string, int)
     """
     pointscore = dict()
     for name in names:
@@ -68,8 +68,8 @@ def init_scoreboard(names):
 
 def roll_dice(number_of_dice):
     """
-    @param number_of_dice: number of dice to roll
-    @return: results of dice roll
+    @param number_of_dice: int
+    @return: list of ints
     Rolls a given number of D6
     """
     results = []
@@ -82,11 +82,12 @@ def roll_dice(number_of_dice):
 
 def calculate_points(cast, strict=True, use_sonderregel=False):
     """
-    @param cast: chosen dice for evaluation
-    @param strict: When True, every given dice has to be important for the result, otherwise the method returns 0 points
-    @param use_sonderregel: sonderregel was chosen
-    @return: points
+    @param cast: list of ints
+    @param strict: bool
+    @param use_sonderregel: bool
+    @return: tuple of (int, bool)
     calculates points for a given throw and returns points
+    When strict is True, every given dice has to be important for the result, otherwise the method returns 0 points
     """
     cast.sort()
     three_ones_picked = False
@@ -124,9 +125,9 @@ def calculate_points(cast, strict=True, use_sonderregel=False):
 
 def play_round(name, use_sonderregel):
     """
-    @param name: Player that is currently playing
-    @param use_sonderregel: sonderregel was chosen
-    @return: points for round
+    @param name: string
+    @param use_sonderregel: bool
+    @return: int
     """
     print(f'\n{name}, it\'s your turn!')
     dieCount = 6
@@ -173,7 +174,7 @@ def play_round(name, use_sonderregel):
 
 def print_scoreboard(scoreboard):
     """
-    @param scoreboard: Dictionary of players and points
+    @param scoreboard: dict of (str, int)
     prints points of all players
     """
     print("\n------------------------")
