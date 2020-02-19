@@ -25,11 +25,13 @@ class Node:
     def set_right(self, value):
         self.right = value
 
-    def is_leaf(self):
+    def number_of_children(self):
         if self.left is None and self.right is None:
-            return True
+            return 0
+        if self.left is None or self.right is None:
+            return 1
         else:
-            return False
+            return 2
 
 
 def main():

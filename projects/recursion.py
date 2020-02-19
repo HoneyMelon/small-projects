@@ -1,0 +1,123 @@
+def deliver_presents(houses):
+    """
+    @param houses: list
+    """
+    if len(houses) == 1:
+        print('Delivering to:', houses[0])
+        return
+    mid = len(houses) // 2
+    first_half = houses[:mid]
+    second_half = houses[mid:]
+    deliver_presents(first_half)
+    deliver_presents(second_half)
+
+
+def factorial(n):
+    if n == 1:
+        return 1
+    return n * factorial(n - 1)
+
+
+def rec_sum(n):
+    if n <= 1:
+        return 1
+    return n + rec_sum(n - 1)
+
+
+def sum_list(list):
+    if len(list) == 0:
+        return 0
+    head_of_list = list[0]
+    rest = list[1:]
+    return head_of_list + sum_list(rest)
+
+
+def fibonacci(n):
+    if n == 0:
+        return 0
+    if n == 1:
+        return 1
+    return fibonacci(n-1) + fibonacci(n-2)
+
+
+def to_base(n, base):
+    digits = '0123456789ABCDEF'
+    if n < base:
+        return digits[n]
+    return to_base(n // base, base) + digits[n % base]
+
+
+def sum_of_digits(n):
+    if n == 0:
+        return 0
+    return n % 10 + sum_of_digits(n // 10)
+
+
+def sum_series(n):
+    if n <= 0:
+        return 0
+    return n + sum_series(n-2)
+
+
+def harmonic_sum(n):
+    if n <= 1:
+        return 1
+    return 1 / n + harmonic_sum(n-1)
+
+
+def geometric_sum(n):
+    if n < 0:
+        return 0
+    return 1 / (pow(2, n)) + geometric_sum(n-1)
+
+
+def power(a, b):
+    if b == 1:
+        return a
+    elif b == 0:
+        return 1
+    elif a == 0:
+        return 0
+    return a * power(a, b-1)
+
+
+def gcd(n, k):
+    bigger = max(n, k)
+    smaller = min(n, k)
+    if smaller == 1:
+        return 1
+    if smaller == 0:
+        return bigger
+    return gcd(smaller, bigger % smaller)
+
+
+def max_of_list(list):
+    if len(list) == 1:
+        return list[0]
+    if len(list) == 0:
+        return 0
+    max_list = max_of_list(list[1:])
+    if list[0] > max_list:
+        return list[0]
+    return max_list
+
+
+def main():
+    test_houses = ['Anna\'s', 'Jimmy\'s', 'Kevin\'s']
+    deliver_presents(test_houses)
+    print(factorial(4))
+    print(rec_sum(10))
+    print(sum_list([1, 2, 3]))
+    print(fibonacci(6))
+    print(to_base(2835, 16))
+    print(sum_of_digits(25))
+    print(sum_series(10))
+    print(harmonic_sum(7))
+    print(geometric_sum(7))
+    print(power(2, 3))
+    print(gcd(12, 17))
+    print(max_of_list([1, 5, 87, 45, 13, 70]))
+
+
+if __name__ == '__main__':
+    main()
