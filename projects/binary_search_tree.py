@@ -9,22 +9,22 @@ class BinarySearchTree:
         """
         @param new_node: node type
         """
-        temp_node = self.root
+
         while True:
             # left side
-            if new_node.get_value() < temp_node.get_value():
-                if temp_node.get_left() is None:
-                    temp_node.set_left(new_node)
+            if new_node.get_value() < self.root.get_value():
+                if self.root.get_left() is None:
+                    self.root.set_left(new_node)
                     return
                 else:
-                    temp_node = temp_node.get_left()
+                    self.root = self.root.get_left()
             # right side
             else:
-                if temp_node.get_right() is None:
-                    temp_node.set_right(new_node)
+                if self.root.get_right() is None:
+                    self.root.set_right(new_node)
                     return
                 else:
-                    temp_node = temp_node.get_right()
+                    self.root = self.root.get_right()
 
     def _recursive_insert(self, root, new_node):
         """
@@ -63,16 +63,15 @@ class BinarySearchTree:
     def find(self, node):
         return self._find(self.root, node)
 
-    def min_value(self):
+    def min_node(self, root):
         """
         @return: node type
         """
-        current = self.root
-        while current.get_left() is not None:
-            current = current.get_left()
-        return current
+        if root.get_left() is None:
+            return root
+        return self.min_node(root.get_left())
 
-    def _delete(self, root, node):      # TODO: fix this!
+    def _delete(self, root, node):
         """
         @param node: node type
         """
@@ -80,16 +79,16 @@ class BinarySearchTree:
             return root
 
         if node.value < root.value:
-            self._delete(root.left, node)
+            root.left = self._delete(root.left, node)
         elif node.value > root.value:
-            self._delete(root.right, node)
+            root.right = self._delete(root.right, node)
         else:
             if root.left is None:
                 return root.right
             elif root.right is None:
                 return root.left
-            min_node = root.right.min_value()
-            root.value = min_node.value
+            min_node = self.min_node(root.right)
+            root.value = min_node
             root.right = self._delete(root.right, root.value)
         return root
 
@@ -97,6 +96,8 @@ class BinarySearchTree:
         return self._delete(self.root, node)
 
     def print_tree(self, space):
+        print()
+        print()
         self.print(self.root, space)
 
     def print(self, root, space):
@@ -123,7 +124,7 @@ def main():
     test_tree.rec_insert(Node(17))
 
     test_tree.print_tree(1)
-    test_tree.delete(Node(17))
+    test_tree.delete(Node(10))
     test_tree.print_tree(1)
 
 
