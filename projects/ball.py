@@ -15,6 +15,7 @@ class Ball:
         self.position = position
         self.speed = speed
 
+    def convert_to_ellipse_radius(self):
 
 
     def draw(self, radius, color=(255, 255, 255)):
