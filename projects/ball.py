@@ -1,6 +1,5 @@
 import tisch
 import pygame
-import math
 
 
 class Ball:
@@ -11,12 +10,9 @@ class Ball:
         @param speed: float
         """
         self.radius = radius
-        self.direction = direction
         self.position = position
+        self.direction = direction
         self.speed = speed
-
-    def convert_to_ellipse_radius(self):
-
 
     def draw(self, radius, color=(255, 255, 255)):
         """
@@ -24,9 +20,11 @@ class Ball:
         @param color: tuple of ints
         """
         screen = tisch.draw_field()
-        pygame.draw.circle(screen, color, self.position, radius)
+        pygame.draw.ellipse(screen, color, pygame.Rect(self.position[0] - self.radius,
+                                                       self.position[1] - self.radius, radius * 2, radius * 2))
 
     def next_position(self):
+        friction = 0.0003
         x = self.position[0]
         y = self.position[1]
         x += self.direction[0] * self.speed
@@ -38,7 +36,7 @@ class Ball:
             self.direction[0] = abs(self.direction[0])
 
         # right wall
-        elif x - self.radius >= 625:
+        elif x + self.radius >= 625:
             self.position[0] = 625 - self.radius
             self.direction[0] = -abs(self.direction[0])
 
@@ -48,12 +46,14 @@ class Ball:
             self.direction[1] = abs(self.direction[1])
 
         # lower wall
-        elif y - self.radius >= 450:
+        elif y + self.radius >= 450:
             self.position[1] = 450 - self.radius
             self.direction[1] = -abs(self.direction[1])
         else:
             self.position[0] = x
             self.position[1] = y
+        if self.speed > 0:
+            self.speed -= friction
 
 
 def main():
@@ -61,7 +61,7 @@ def main():
     done = False
     pygame.event.pump()
 
-    test_ball = Ball(10, [2, -2], [300, 300], 1)
+    test_ball = Ball(10, [2, 2], [300, 300], 0.5)
     test_ball.draw(10)
     while not done:
         test_ball.next_position()

@@ -17,7 +17,7 @@ def draw_field():
     # markers
     for i in range(20, 630, int(distance)):
         pygame.draw.circle(screen, (255, 255, 255), (i, 140), 2)
-        pygame.draw.circle(screen, (255, 255, 255), (i, 465), 2)
+        pygame.draw.circle(screen, (255, 255, 255), (i, 460), 2)
     for i in range(145, 455, int(distance)):
         pygame.draw.circle(screen, (255, 255, 255), (15, i), 2)
         pygame.draw.circle(screen, (255, 255, 255), (635, i), 2)
@@ -25,18 +25,17 @@ def draw_field():
     pygame.draw.circle(screen, (0, 0, 0), (325, 145), 15)   # oben
     pygame.draw.circle(screen, (0, 0, 0), (325, 455), 15)   # unten
     # ecken
-    pygame.draw.circle(screen, (0, 0, 0), (20, 145), 15)    # links oben
-    pygame.draw.circle(screen, (0, 0, 0), (630, 145), 15)   # rechts oben
-    pygame.draw.circle(screen, (0, 0, 0), (20, 455), 15)    # links unten
-    pygame.draw.circle(screen, (0, 0, 0), (630, 455), 15)   # recht unten
-
-    pygame.display.flip()
+    pygame.draw.circle(screen, (0, 0, 0), (25, 150), 15)    # links oben
+    pygame.draw.circle(screen, (0, 0, 0), (625, 150), 15)   # rechts oben
+    pygame.draw.circle(screen, (0, 0, 0), (25, 450), 15)    # links unten
+    pygame.draw.circle(screen, (0, 0, 0), (625, 450), 15)   # recht unten
 
     return screen
 
 
 def main():
     draw_field()
+    pygame.display.flip()
 
 
 if __name__ == '__main__':
