@@ -105,3 +105,20 @@ class Tisch:
                 ball.speed = 0
                 return True
         return False
+
+    def _start_position_of_balls(self, number_of_balls, x_start, y_start, distance, position_list):
+        if number_of_balls <= 1:
+            position_list.append([x_start, y_start])
+            return position_list
+        position_list.append([x_start, y_start])
+        new_y = y_start
+        for i in range(number_of_balls - 1):
+            position_list.append([x_start, new_y + distance])
+            new_y += distance
+        return self._start_position_of_balls(number_of_balls - 1, x_start + distance,
+                                             y_start + distance / 2, distance, position_list)
+
+    def start_position_of_balls(self, number_of_balls, x_start, y_start, distance):
+        return self._start_position_of_balls(number_of_balls, x_start, y_start, distance, [])
+
+

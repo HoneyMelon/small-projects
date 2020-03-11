@@ -1,8 +1,10 @@
 import pygame
 import math
 
+
 class Ball:
-    def __init__(self, radius, direction, position, speed, number=None, colour=(255, 255, 255), full=True, on_field=True):
+    def __init__(self, radius, direction, position, speed, number=None, colour=(255, 255, 255), full=True,
+                 on_field=True):
         """
         @param direction: list
         @param position: list
@@ -61,6 +63,7 @@ class Ball:
         direction_length = math.sqrt(self.direction[0] ** 2 + self.direction[1] ** 2)
         self.direction[0] = self.direction[0] / direction_length
         self.direction[1] = self.direction[1] / direction_length
+        return direction_length
 
     def move_to_cursor(self, x, y):
         dx = x - self.position[0]
@@ -68,7 +71,7 @@ class Ball:
 
         self.direction[0] = dx
         self.direction[1] = dy
-        self.speed = 2
+        self.speed = 3.5
 
     def draw_white_border(self, screen):
         borders = self.get_white_border_polygons()
@@ -89,6 +92,62 @@ class Ball:
         dx = math.cos(rad) * self.radius
         dy = math.sin(rad) * self.radius
         return self.position[0] + dx, self.position[1] + dy
+
+    def collides_with(self, other):
+        distance_length = self.distance_to(other)
+        if distance_length <= self.radius + other.radius:
+            return True
+        return False
+
+    def distance_to(self, other):
+        dx = self.position[0] - other.position[0]
+        dy = self.position[1] - other.position[1]
+        return math.sqrt(dx ** 2 + dy ** 2)
+
+    def ball_collision(self, other):
+        if self.on_field and self.collides_with(other):
+            self.correct_collision(other)
+            dx = self.position[0] - other.position[0]
+            dy = self.position[1] - other.position[1]
+            distance = self.radius + other.radius
+            collision = [dx / distance, dy / distance]
+
+            self_speed_direction = [self.direction[0] * self.speed, self.direction[1] * self.speed]
+            other_speed_direction = [other.direction[0] * other.speed, other.direction[1] * other.speed]
+
+            self_dot = self.dot_product(self_speed_direction, collision)
+            other_dot = self.dot_product(other_speed_direction, collision)
+
+            self_x = self_speed_direction[0] + (other_dot - self_dot) * collision[0] * 0.95
+            self_y = self_speed_direction[1] + (other_dot - self_dot) * collision[1] * 0.95
+            other_x = other_speed_direction[0] + (self_dot - other_dot) * collision[0] * 0.95
+            other_y = other_speed_direction[1] + (self_dot - other_dot) * collision[1] * 0.95
+
+            self.direction = [self_x, self_y]
+            self.speed = self.normalize_direction()
+
+            other.direction = [other_x, other_y]
+            other.speed = other.normalize_direction()
+
+    def correct_collision(self, other):
+        dx = self.position[0] - other.position[0]
+        dy = self.position[1] - other.position[1]
+        length_d = math.sqrt(dx ** 2 + dy ** 2)
+        collision = [dx / length_d, dy / length_d]
+        expected_space = self.radius + other.radius
+        missing_space = expected_space - length_d
+        ball_movement_x = collision[0] * missing_space / 2
+        ball_movement_y = collision[1] * missing_space / 2
+        self.position[0] += ball_movement_x
+        self.position[1] += ball_movement_y
+        other.position[0] -= ball_movement_x
+        other.position[1] -= ball_movement_y
+
+    def dot_product(self, d, v):
+        return d[0] * v[0] + d[1] * v[1]
+
+    def move_ball_to_position(self, x, y):
+        self.position = [x, y]
 
 
 def main():
