@@ -1,4 +1,5 @@
 import pygame
+import tisch
 import math
 
 
@@ -50,14 +51,15 @@ class Ball:
             self.speed -= friction
 
     def next_position(self, tisch):
-        self.normalize_direction()
-        x = self.position[0]
-        y = self.position[1]
-        # print(self.direction)
-        x += self.direction[0] * self.speed
-        y += self.direction[1] * self.speed
-        tisch.check_rebound(self, x, y)
-        self.apply_friction()
+        if self.on_field:
+            self.normalize_direction()
+            x = self.position[0]
+            y = self.position[1]
+            # print(self.direction)
+            x += self.direction[0] * self.speed
+            y += self.direction[1] * self.speed
+            tisch.check_rebound(self, x, y)
+            self.apply_friction()
 
     def normalize_direction(self):
         direction_length = math.sqrt(self.direction[0] ** 2 + self.direction[1] ** 2)
@@ -65,13 +67,22 @@ class Ball:
         self.direction[1] = self.direction[1] / direction_length
         return direction_length
 
-    def move_to_cursor(self, x, y):
+    def distance_to_cursor(self, x, y):
         dx = x - self.position[0]
         dy = y - self.position[1]
 
+        return math.sqrt(dx ** 2 + dy ** 2)
+
+    def move_to_cursor(self, x, y):
+        dx = x - self.position[0]
+        dy = y - self.position[1]
+        speed = self.distance_to_cursor(x, y) / 45
+        if speed > 5:
+            speed = 5
+
         self.direction[0] = dx
         self.direction[1] = dy
-        self.speed = 3.5
+        self.speed = speed
 
     def draw_white_border(self, screen):
         borders = self.get_white_border_polygons()
@@ -146,8 +157,55 @@ class Ball:
     def dot_product(self, d, v):
         return d[0] * v[0] + d[1] * v[1]
 
-    def move_ball_to_position(self, x, y):
+    def white_ball_back_on_field(self):
+        if self.number is None and not self.on_field:
+            self.on_field = True
+            self.position = [500, 302]
+
+    def place_white_on_y_axis(self, tisch, y):
+        while self.number is None and not self.on_field:
+            screen = tisch.get_screen()
+            x_position = 500
+            self.wait_for_user(tisch, y)
+            #pygame.display.flip()
+            self.place_at_cursor(x_position, y)
+            self.speed = 0
+            self.on_field = True
+
+    def wait_for_user(self, tisch, y):
+        ball_placed = False
+        x_position = 500
+        while not ball_placed:
+            screen = tisch.get_screen()
+            pygame.draw.line(screen, (0, 0, 255), [500, 150], [500, 450], 5)
+            _, mouse_y = pygame.mouse.get_pos()
+            pygame.draw.circle(screen, (255, 255, 255), [x_position, mouse_y], 10)
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    ball_placed = True
+
+    def place_at_cursor(self, x, y):
         self.position = [x, y]
+
+    def cue_position(self, mouse_x, mouse_y):
+        x = self.position[0] - mouse_x
+        y = self.position[1] - mouse_y
+
+        qx = self.position[0] + x
+        qy = self.position[1] + y
+
+        return qx, qy
+
+
+
+def balls_in_motion(ball_list):
+    summe = 0
+    for i in range(len(ball_list)):
+        summe += ball_list[i].speed
+    if summe > 0:
+        return True
+    return False
 
 
 def main():

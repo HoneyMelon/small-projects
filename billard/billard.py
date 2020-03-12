@@ -1,5 +1,6 @@
 from tisch import Tisch
 from ball import Ball
+from ball import *
 import pygame
 
 pygame.font.init()
@@ -15,8 +16,6 @@ ORANGE = (253, 157, 83)
 GREEN = (157, 192, 124)
 BROWN = (164, 84, 88)
 BLACK = (59, 59, 59)
-
-
 
 tisch = Tisch()
 
@@ -39,8 +38,9 @@ ball13 = Ball(10, [5, 1], position_list[12], 0, 13, ORANGE, False)
 ball14 = Ball(10, [5, 1], position_list[13], 0, 14, GREEN, False)
 ball15 = Ball(10, [5, 1], position_list[14], 0, 15, BROWN, False)
 white_ball = Ball(10, [5, 1], [500, 302], 0)
-#balls = [white_ball, balll]
-balls = [white_ball, balll, ball2, ball3, ball4, ball5, ball6, ball7, ball8, ball9, ball10, ball11, ball12, ball13, ball14, ball15]
+# balls = [white_ball, balll]
+balls = [white_ball, balll, ball2, ball3, ball4, ball5, ball6, ball7, ball8, ball9, ball10, ball11, ball12, ball13,
+         ball14, ball15]
 ball_out_counter = 0
 x = 20
 y = 110
@@ -50,19 +50,34 @@ while not done:
     for i in range(len(balls)):
         for j in range(i + 1, len(balls)):
             balls[i].ball_collision(balls[j])
+    ball_moving = balls_in_motion(balls)
     for ball in balls:
-        ball.next_position(tisch)
         ball.draw(tisch, font)
+        ball.next_position(tisch)
+        print(ball_moving)
         hole = tisch.is_in_hole(ball)
-        if hole:
+        if hole and white_ball.on_field:
             ball_out_counter += 1
-            #ball.move_ball_to_position(x, y, tisch, font)
             x += 40
             print(ball_out_counter)
+        if not white_ball.on_field:
+            pygame.draw.line(tisch.screen, (255, 255, 255), [500, 150], [500, 450])
+            if event.type == pygame.MOUSEMOTION and not ball_moving:
+                _, mouse_y = pygame.mouse.get_pos()
+                white_ball.position = [500, mouse_y]
+            if not ball_moving:
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    _, mouse_y = pygame.mouse.get_pos()
+                    white_ball.place_at_cursor(500, mouse_y)
+                    white_ball.on_field = True
+                    white_ball.speed = 0
     pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if white_ball.on_field and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             x, y = pygame.mouse.get_pos()
             white_ball.move_to_cursor(x, y)
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+            x, y = pygame.mouse.get_pos()
+            balls[1].place_at_cursor(x, y)

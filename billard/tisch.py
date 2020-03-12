@@ -99,10 +99,6 @@ class Tisch:
             y = ball.position[1] - loch[1]
             distance = math.sqrt(x**2 + y**2)
             if distance <= 20:
-                ball.on_field = False
-                ball.position[0] = 20
-                ball.position[1] = 110
-                ball.speed = 0
                 return True
         return False
 
