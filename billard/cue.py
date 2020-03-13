@@ -1,6 +1,4 @@
-import math
 import pygame
-from ball import Ball
 
 
 class Cue:
@@ -9,20 +7,6 @@ class Cue:
         self.y = y
         self.length = length
         self.width = width
-
-    def calculate_new_cue_position(self, angle, ball_x, ball_y):
-        sin = math.sin(angle)
-        cos = math.cos(angle)
-
-        ball_x -= self.x
-        ball_y -= self.y
-
-        xnew = ball_x * cos - ball_y * sin
-        ynew = ball_x * sin + ball_y * cos
-
-        ball_x = xnew + self.x
-        ball_y = ynew + self.y
-        return ball_x, ball_y
 
 
 def draw_cue(screen, ball, end_x, end_y):

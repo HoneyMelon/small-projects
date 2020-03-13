@@ -37,6 +37,15 @@ class Tisch:
         pygame.draw.circle(self.screen, (0, 0, 0), (625, 150), 20)   # rechts oben
         pygame.draw.circle(self.screen, (0, 0, 0), (25, 450), 20)    # links unten
         pygame.draw.circle(self.screen, (0, 0, 0), (625, 450), 20)   # recht unten
+
+    def draw_speed_meter(self, drawn_speed):
+        drawn_speed = drawn_speed * 20
+        pygame.event.pump()
+
+        # background
+        pygame.draw.rect(self.screen, (0, 0, 0), pygame.Rect(270, 500, 110, 20))
+        # bar
+        pygame.draw.rect(self.screen, (82, 220, 86), pygame.Rect(275, 505, drawn_speed, 10))
     
     def check_rebound(self, ball, x, y):
         """
@@ -116,5 +125,3 @@ class Tisch:
 
     def start_position_of_balls(self, number_of_balls, x_start, y_start, distance):
         return self._start_position_of_balls(number_of_balls, x_start, y_start, distance, [])
-
-
